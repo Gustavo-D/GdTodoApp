@@ -2,7 +2,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using System.Security.Cryptography;
 
 namespace GdToDoApp.Server.Services
@@ -12,7 +11,7 @@ namespace GdToDoApp.Server.Services
         public string GenerateToken(Usuario usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Shake256.HashData(UTF8Encoding.UTF8.GetBytes("segredo"), 256);
+            var key = SHA3_256.HashData(Util.Util.JwtSecret);
             var Expires = DateTime.UtcNow;
 
             var tokenDescriptor = new SecurityTokenDescriptor

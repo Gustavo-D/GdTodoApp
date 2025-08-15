@@ -3,11 +3,11 @@ using GdToDoApp.Server.Model;
 using GdToDoApp.Server.Repositories;
 using GdToDoApp.Server.Repositories.Interfaces;
 using GdToDoApp.Server.Services;
+using GdToDoApp.Server.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace GdTodoApp.Server
@@ -60,7 +60,7 @@ namespace GdTodoApp.Server
             });
 
 
-            var key = Shake256.HashData(UTF8Encoding.UTF8.GetBytes("segredo"), 256);
+            var key = SHA3_256.HashData(Util.JwtSecret);
 
             builder.Services.AddAuthentication(x =>
             {

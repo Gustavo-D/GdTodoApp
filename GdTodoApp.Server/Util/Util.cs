@@ -9,6 +9,8 @@ namespace GdToDoApp.Server.Util
 {
     public static class Util
     {
+        internal static byte[] JwtSecret { get; private set; } = RandomNumberGenerator.GetBytes(32);
+
         public static string HashPassword(Usuario usuario, string senha)
         {
             var passwordHasher = new PasswordHasher<Usuario>();
