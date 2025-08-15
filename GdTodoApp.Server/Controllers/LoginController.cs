@@ -1,8 +1,8 @@
-﻿using GdToDoApp.Server.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using GdToDoApp.Server.Dtos;
 using GdTodoApp.Server.Dtos.Shared;
+using GdToDoApp.Server.Services.Interfaces;
 
 namespace GdToDoApp.Server.Controllers
 {

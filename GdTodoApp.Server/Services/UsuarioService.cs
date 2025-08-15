@@ -1,5 +1,6 @@
 ﻿using GdToDoApp.Server.Model;
 using GdToDoApp.Server.Repositories.Interfaces;
+using GdToDoApp.Server.Services.Interfaces;
 
 namespace GdToDoApp.Server.Services
 {

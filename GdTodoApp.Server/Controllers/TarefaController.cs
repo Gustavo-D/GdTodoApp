@@ -1,7 +1,6 @@
 ﻿using GdTodoApp.Server.Dtos.Shared;
-using GdToDoApp.Server.Dtos;
 using GdToDoApp.Server.Model;
-using GdToDoApp.Server.Services;
+using GdToDoApp.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GdToDoApp.Server.Controllers

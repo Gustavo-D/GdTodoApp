@@ -1,6 +1,6 @@
 ﻿using GdToDoApp.Server.Model;
 
-namespace GdToDoApp.Server.Services
+namespace GdToDoApp.Server.Services.Interfaces
 {
     public interface IUsuarioService
     {

@@ -3,6 +3,7 @@ using GdToDoApp.Server.Model;
 using GdToDoApp.Server.Repositories;
 using GdToDoApp.Server.Repositories.Interfaces;
 using GdToDoApp.Server.Services;
+using GdToDoApp.Server.Services.Interfaces;
 using GdToDoApp.Server.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
