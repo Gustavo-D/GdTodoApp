@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Net;
 using System.Security.Cryptography;
 
-namespace GdToDoApp.Server.Util
+namespace GdTodoApp.Server.Util
 {
     public static class Util
     {

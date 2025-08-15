@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace GdToDoApp.Server.Model;
 
@@ -8,9 +6,9 @@ public partial class Usuario
 {
     public long Id { get; set; }
 
-    public string Username { get; set; } = null!;
+    public string Username { get; set; }
     [JsonIgnore]
-    public string PasswordHash { get; set; } = null!;
+    public string PasswordHash { get; set; }
 
     public DateTime CreatedAt { get; set; }
     [JsonIgnore]

@@ -1,6 +1,4 @@
-﻿using GdToDoApp.Server.Util;
-
-namespace GdTodoApp.Server.Dtos.Shared
+﻿namespace GdTodoApp.Server.Dtos.Shared
 {
     public class Error
     {

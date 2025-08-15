@@ -1,6 +1,9 @@
 ﻿using GdToDoApp.Server.Model;
 using GdToDoApp.Server.Repositories.Interfaces;
 using GdToDoApp.Server.Services.Interfaces;
+using GdTodoApp.Server.Util;
+using GdTodoApp.Server.Dtos;
+using GdTodoApp.Server.Dtos.Mappers;
 
 namespace GdToDoApp.Server.Services
 {
@@ -27,7 +30,7 @@ namespace GdToDoApp.Server.Services
             var validouSenha = false;
             if (usuario != null && !string.IsNullOrWhiteSpace(usuario.Username))
             {
-                validouSenha = Util.Util.VerificarHashPassword(usuario, usuario.PasswordHash, password);
+                validouSenha = Util.VerificarHashPassword(usuario, usuario.PasswordHash, password);
             }
 
             string jwt = null;
@@ -39,11 +42,12 @@ namespace GdToDoApp.Server.Services
             return validouSenha ? (usuario, jwt) : (null, null);
         }
 
-        public async Task AddUsuarioAsync(Usuario usuario)
+        public async Task AddUsuarioAsync(CreateUsuario createUsuario)
         {
-            var existente = await _repository.GetByUsername(usuario.Username);
+            var existente = await _repository.GetByUsername(createUsuario.Username);
             if (existente == null)
             {
+                var usuario = CreateUsuarioMapper.CreateUsuarioToUsuario(createUsuario);
                 await _repository.Create(usuario);
             }
             else

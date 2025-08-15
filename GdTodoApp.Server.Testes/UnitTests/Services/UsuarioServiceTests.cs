@@ -3,7 +3,8 @@ using GdToDoApp.Server.Services;
 using GdToDoApp.Server.Services.Interfaces;
 using Moq;
 using GdToDoApp.Server.Model;
-using GdToDoApp.Server.Util;
+using GdTodoApp.Server.Dtos;
+using GdTodoApp.Server.Dtos.Mappers;
 
 namespace GdTodoApp.Server.Testes.UnitTests.Services
 {
@@ -58,7 +59,7 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
             {
                 Id = 1,
                 Username = usernameCorreto,
-                PasswordHash = Util.HashPassword(null, passwordCorreto)
+                PasswordHash = Util.Util.HashPassword(null, passwordCorreto)
             };
 
             _mockRepository.Setup(p => p.GetByUsername(usernameCorreto)).ReturnsAsync(usuarioCorreto);
@@ -84,7 +85,7 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
             {
                 Id = 1,
                 Username = usernameCorreto,
-                PasswordHash = Util.HashPassword(null, passwordCorreto)
+                PasswordHash = Util.Util.HashPassword(null, passwordCorreto)
             };
 
             _mockRepository.Setup(p => p.GetByUsername(usernameCorreto)).ReturnsAsync(usuarioCorreto);
@@ -109,7 +110,7 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
             {
                 Id = 1,
                 Username = usernameCorreto,
-                PasswordHash = Util.HashPassword(null, passwordCorreto)
+                PasswordHash = Util.Util.HashPassword(null, passwordCorreto)
             };
 
             _mockRepository.Setup(p => p.GetByUsername(usernameCorreto)).ReturnsAsync(usuarioCorreto);
@@ -134,7 +135,7 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
             {
                 Id = 1,
                 Username = usernameCorreto,
-                PasswordHash = Util.HashPassword(null, passwordCorreto)
+                PasswordHash = Util.Util.HashPassword(null, passwordCorreto)
             };
 
             _mockRepository.Setup(p => p.GetByUsername(usernameCorreto)).ReturnsAsync(usuarioCorreto);
@@ -152,10 +153,11 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
         public async Task AddUsuarioAsync_QuandoUsernameNaoExiste_DeveCriarUsuario()
         {
             // Arrange
-            var usuario = new Usuario { Username = "usuarioInexistente" };
+            var createUsuario = new CreateUsuario { Username = "usuarioInexistente", Password = "password" };
+            var usuario = CreateUsuarioMapper.CreateUsuarioToUsuario(createUsuario);
 
             _mockRepository
-                .Setup(r => r.GetByUsername(usuario.Username))
+                .Setup(r => r.GetByUsername(createUsuario.Username))
                 .ReturnsAsync((Usuario)null);
 
             _mockRepository
@@ -163,31 +165,32 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
                 .Returns(Task.CompletedTask);
 
             // Act
-            await _service.AddUsuarioAsync(usuario);
+            await _service.AddUsuarioAsync(createUsuario);
 
             // Assert
-            _mockRepository.Verify(r => r.GetByUsername(usuario.Username), Times.Once);
-            _mockRepository.Verify(r => r.Create(usuario), Times.Once);
+            _mockRepository.Verify(p => p.GetByUsername(createUsuario.Username), Times.Once);
+            _mockRepository.Verify(p => p.Create(It.IsAny<Usuario>()), Times.Once);
         }
 
         [Fact]
         public async Task AddUsuarioAsync_QuandoUsernameExiste_DeveLancarExcecao()
         {
             // Arrange
-            var existingUsuario = new Usuario { Username = "usuarioExistente" };
-            var newUsuario = new Usuario { Username = "usuarioExistente" };
+            var usuarioExistente = new Usuario { Username = "usuarioExistente" };
+            var createUsuario = new CreateUsuario { Username = "usuarioExistente", Password = "password" };
+            var novoUsuario = CreateUsuarioMapper.CreateUsuarioToUsuario(createUsuario);
 
             _mockRepository
-                .Setup(r => r.GetByUsername(newUsuario.Username))
-                .ReturnsAsync(existingUsuario);
+                .Setup(r => r.GetByUsername(novoUsuario.Username))
+                .ReturnsAsync(usuarioExistente);
 
             // Act & Assert
             var exception = await Assert.ThrowsAsync<Exception>(
-                () => _service.AddUsuarioAsync(newUsuario)
+                () => _service.AddUsuarioAsync(createUsuario)
             );
 
             Assert.Equal("Username inválido.", exception.Message);
-            _mockRepository.Verify(r => r.GetByUsername(newUsuario.Username), Times.Once);
+            _mockRepository.Verify(r => r.GetByUsername(novoUsuario.Username), Times.Once);
             _mockRepository.Verify(r => r.Create(It.IsAny<Usuario>()), Times.Never);
         }
     }

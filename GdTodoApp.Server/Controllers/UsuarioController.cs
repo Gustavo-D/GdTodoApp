@@ -1,4 +1,5 @@
-﻿using GdTodoApp.Server.Dtos.Shared;
+﻿using GdTodoApp.Server.Dtos;
+using GdTodoApp.Server.Dtos.Shared;
 using GdToDoApp.Server.Model;
 using GdToDoApp.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,7 @@ namespace GdToDoApp.Server.Controllers
         [HttpPost]
         [Route("usuario")]
         [AllowAnonymous]
-        public async Task<ResultadoApi<object>> CreateUsuario(Usuario usuario)
+        public async Task<ResultadoApi<object>> CreateUsuario(CreateUsuario usuario)
         {
             await _usuarioService.AddUsuarioAsync(usuario);
 

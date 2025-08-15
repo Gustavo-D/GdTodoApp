@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using GdToDoApp.Server.Services.Interfaces;
+using GdTodoApp.Server.Util;
 
 namespace GdToDoApp.Server.Services
 {
@@ -12,7 +13,7 @@ namespace GdToDoApp.Server.Services
         public string GenerateToken(Usuario usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = SHA3_256.HashData(Util.Util.JwtSecret);
+            var key = SHA3_256.HashData(Util.JwtSecret);
             var Expires = DateTime.UtcNow;
 
             var tokenDescriptor = new SecurityTokenDescriptor

@@ -1,5 +1,4 @@
 ﻿using GdTodoApp.Server.Dtos.Shared;
-using GdToDoApp.Server.Util;
 using System.Text.Json;
 
 namespace GdTodoApp.Server.Middlewares
@@ -33,7 +32,7 @@ namespace GdTodoApp.Server.Middlewares
                recursos disponíveis para a aplicação consigam suportar este comportam
                ento, não vejo problema em ter um possível impacto no desempenho em no
                me de um desenvolvimento mais direto do fluxo de error-handling.       */
-            Util.GetResultadoApiFromException(context, ex, out ResultadoApi<object> resultadoApi);
+            Util.Util.GetResultadoApiFromException(context, ex, out ResultadoApi<object> resultadoApi);
 
             var resultado = JsonSerializer.Serialize(resultadoApi);
             context.Response.Headers["Content-Type"] = "application/json; charset=utf-8";
