@@ -21,6 +21,33 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
         }
 
         [Fact]
+        public async Task GetUsuariosAsync_RetornaUsuarios()
+        {
+            //Arrange
+            var usuarios = new Usuario[]
+            {
+                new Usuario
+                {
+                    Id = 1,
+                    Username = "username1"
+                },
+                new Usuario
+                {
+                    Id = 2,
+                    Username = "username2"
+                }
+            };
+
+            _mockRepository.Setup(p => p.GetById(null, true)).ReturnsAsync(usuarios);
+
+            // Act
+            var retorno = await _service.GetUsuariosAsync();
+
+            // Assert
+            Assert.Equal(usuarios, retorno);
+        }
+
+        [Fact]
         public async Task GetUsuarioLoginAsync_AceitaLoginCorreto()
         {
             // Arrange
@@ -40,7 +67,7 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
             // Act
             var retorno = await _service.GetUsuarioLoginAsync(usernameCorreto, passwordCorreto);
 
-            //Assert
+            // Assert
             Assert.Equal(usernameCorreto, retorno.usuario.Username);
             Assert.Equal(usuarioCorreto.Id, retorno.usuario.Id);
             Assert.Equal(jwtCorreto, retorno.jwt);
@@ -66,7 +93,7 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
             // Act
             var retorno = await _service.GetUsuarioLoginAsync("usernameErrado", passwordCorreto);
 
-            //Assert
+            // Assert
             Assert.Null(retorno.usuario);
             Assert.Null(retorno.jwt);
         }
@@ -91,7 +118,7 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
             // Act
             var retorno = await _service.GetUsuarioLoginAsync(usernameCorreto, "passwordErrado");
 
-            //Assert
+            // Assert
             Assert.Null(retorno.usuario);
             Assert.Null(retorno.jwt);
         }
@@ -116,9 +143,52 @@ namespace GdTodoApp.Server.Testes.UnitTests.Services
             // Act
             var retorno = await _service.GetUsuarioLoginAsync("usernameErrado", "passwordErrado");
 
-            //Assert
+            // Assert
             Assert.Null(retorno.usuario);
             Assert.Null(retorno.jwt);
+        }
+
+        [Fact]
+        public async Task AddUsuarioAsync_QuandoUsernameNaoExiste_DeveCriarUsuario()
+        {
+            // Arrange
+            var usuario = new Usuario { Username = "usuarioInexistente" };
+
+            _mockRepository
+                .Setup(r => r.GetByUsername(usuario.Username))
+                .ReturnsAsync((Usuario)null);
+
+            _mockRepository
+                .Setup(r => r.Create(usuario))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            await _service.AddUsuarioAsync(usuario);
+
+            // Assert
+            _mockRepository.Verify(r => r.GetByUsername(usuario.Username), Times.Once);
+            _mockRepository.Verify(r => r.Create(usuario), Times.Once);
+        }
+
+        [Fact]
+        public async Task AddUsuarioAsync_QuandoUsernameExiste_DeveLancarExcecao()
+        {
+            // Arrange
+            var existingUsuario = new Usuario { Username = "usuarioExistente" };
+            var newUsuario = new Usuario { Username = "usuarioExistente" };
+
+            _mockRepository
+                .Setup(r => r.GetByUsername(newUsuario.Username))
+                .ReturnsAsync(existingUsuario);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<Exception>(
+                () => _service.AddUsuarioAsync(newUsuario)
+            );
+
+            Assert.Equal("Username inválido.", exception.Message);
+            _mockRepository.Verify(r => r.GetByUsername(newUsuario.Username), Times.Once);
+            _mockRepository.Verify(r => r.Create(It.IsAny<Usuario>()), Times.Never);
         }
     }
 }

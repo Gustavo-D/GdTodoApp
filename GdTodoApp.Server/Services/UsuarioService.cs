@@ -50,8 +50,6 @@ namespace GdToDoApp.Server.Services
             {
                 throw new Exception("Username inválido.");
             }
-
-
         }
     }
 }
