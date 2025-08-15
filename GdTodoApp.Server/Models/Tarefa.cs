@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace GdToDoApp.Server.Model;
 
@@ -20,6 +21,6 @@ public partial class Tarefa
     public DateTimeOffset UpdatedAt { get; set; }
 
     public long? UserId { get; set; }
-
+    [JsonIgnore]
     public virtual Usuario? User { get; set; }
 }

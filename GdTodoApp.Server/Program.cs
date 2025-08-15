@@ -1,3 +1,4 @@
+using GdTodoApp.Server.Middlewares;
 using GdToDoApp.Server.Model;
 using GdToDoApp.Server.Repositories;
 using GdToDoApp.Server.Repositories.Interfaces;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace GdTodoApp.Server
 {
@@ -18,7 +20,11 @@ namespace GdTodoApp.Server
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                });
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
@@ -82,6 +88,7 @@ namespace GdTodoApp.Server
             builder.Services.AddScoped<ITarefaService, TarefaService>();
             var app = builder.Build();
 
+            app.UseMiddleware(typeof(MyExceptionMiddleware));
             app.UseDefaultFiles();
             app.MapStaticAssets();
             // Configure the HTTP request pipeline.

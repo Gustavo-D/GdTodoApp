@@ -1,4 +1,5 @@
-﻿using GdToDoApp.Server.Dtos;
+﻿using GdTodoApp.Server.Dtos.Shared;
+using GdToDoApp.Server.Dtos;
 using GdToDoApp.Server.Model;
 using GdToDoApp.Server.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,70 +17,95 @@ namespace GdToDoApp.Server.Controllers
 
         [HttpGet]
         [Route("tarefa")]
-        public async Task<Tarefa> GetTarefa(long id)
+        public async Task<ResultadoApi<Tarefa>> GetTarefa(long id)
         {
             var tarefa = await _tarefaService.GetTarefaAsync(id);
-            return tarefa;
+            return new ResultadoApi<Tarefa>
+            {
+                Data = tarefa,
+            };
         }
 
         [HttpGet]
         [Route("tarefas")]
-        public async Task<Tarefa[]> GetTarefas()
+        public async Task<ResultadoApi<Tarefa[]>> GetTarefas()
         {
             var tarefas = await _tarefaService.GetTarefasAsync();
-            return tarefas;
+            return new ResultadoApi<Tarefa[]>
+            {
+                Data = tarefas,
+            };
         }
 
         [HttpGet]
         [Route("tarefas/filter")]
-        public async Task<Tarefa[]> GetByFilter(long? userId, int? isCompleted,
+        public async Task<ResultadoApi<Tarefa[]>> GetByFilter(long? userId, int? isCompleted,
                                                DateTimeOffset? dateCreatedAtStart, DateTimeOffset? dateCreatedAtEnd,
                                                DateTimeOffset? dateUpdatedAtStart, DateTimeOffset? dateUpdatedAtEnd)
         {
             var tarefas = await _tarefaService.GetTarefasByFilterAsync(userId, isCompleted,
                                                                 dateCreatedAtStart, dateCreatedAtEnd,
                                                                 dateUpdatedAtStart, dateUpdatedAtEnd);
-            return tarefas;
+            return new ResultadoApi<Tarefa[]>
+            {
+                Data = tarefas,
+            };
         }
 
         [HttpPost]
         [Route("tarefa")]
-        public async Task<Tarefa> CreateTarefa(Dtos.TarefaDto tarefaDto)
+        public async Task<ResultadoApi<Tarefa>> CreateTarefa(Dtos.TarefaDto tarefaDto)
         {
             var tarefaCriada = await _tarefaService.CreateTarefaAsync(tarefaDto);
-            return tarefaCriada;
+            return new ResultadoApi<Tarefa>
+            {
+                Data = tarefaCriada,
+            };
         }
 
         [HttpPatch]
         [Route("tarefa")]
-        public async Task<Tarefa> UpdateTarefaAsync(Dtos.TarefaDto tarefaDto)
+        public async Task<ResultadoApi<Tarefa>> UpdateTarefaAsync(Dtos.TarefaDto tarefaDto)
         {
             var tarefaAtualizada = await _tarefaService.UpdateTarefaAsync(tarefaDto);
-            return tarefaAtualizada;
+            return new ResultadoApi<Tarefa>
+            {
+                Data = tarefaAtualizada,
+            };
         }
 
         [HttpDelete]
         [Route("tarefa")]
-        public async Task<(bool success, string message)> DeleteTarefaAsync(long id)
+        public async Task<ResultadoApi<object>> DeleteTarefaAsync(long id)
         {
             await _tarefaService.DeleteTarefaAsync(id);
-            return (true, "Tarefa excluída com sucesso");
+            return new ResultadoApi<object>
+            {
+                Data = null,
+                Message = "Tarefa excluída com sucesso"
+            };
         }
 
         [HttpPatch]
         [Route("tarefa/category")]
-        public async Task<Tarefa> UpdateTarefaCategory(long id, string category)
+        public async Task<ResultadoApi<Tarefa>> UpdateTarefaCategory(long id, string category)
         {
             var tarefaAtualizada = await _tarefaService.UpdateTarefaCategoryAsync(id, category);
-            return tarefaAtualizada;
+            return new ResultadoApi<Tarefa>
+            {
+                Data = tarefaAtualizada,
+            };
         }
 
         [HttpGet]
         [Route("categories")]
-        public async Task<string[]> GetTarefaCategories()
+        public async Task<ResultadoApi<string[]>> GetTarefaCategories()
         {
             var categories = await _tarefaService.GetTarefaCategoriesAsync();
-            return categories.Select(p => p).ToArray();
+            return new ResultadoApi<string[]>
+            {
+                Data = [.. categories.Select(p => p)]
+            };
         }
     }
 }

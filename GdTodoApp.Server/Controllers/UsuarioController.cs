@@ -1,4 +1,5 @@
-﻿using GdToDoApp.Server.Model;
+﻿using GdTodoApp.Server.Dtos.Shared;
+using GdToDoApp.Server.Model;
 using GdToDoApp.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,20 +17,27 @@ namespace GdToDoApp.Server.Controllers
 
         [HttpGet]
         [Route("usuarios")]
-        public async Task<Usuario[]> GetUsuarios()
+        public async Task<ResultadoApi<Usuario[]>> GetUsuarios()
         {
             var usuarios = await _usuarioService.GetUsuariosAsync();
-            return usuarios;
+            return new ResultadoApi<Usuario[]>
+            {
+                Data = usuarios,
+            };
         }
 
         [HttpPost]
         [Route("usuario")]
         [AllowAnonymous]
-        public async Task<(bool success, string message)> CreateUsuario(Usuario usuario)
+        public async Task<ResultadoApi<object>> CreateUsuario(Usuario usuario)
         {
             await _usuarioService.AddUsuarioAsync(usuario);
 
-            return (success: true, message: "Usuário criado com sucesso");
+            return new ResultadoApi<object>()
+            {
+                Data = null,
+                Message = "Usuário criado com sucesso"
+            };
         }
     }
 }
