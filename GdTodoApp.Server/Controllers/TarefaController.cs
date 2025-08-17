@@ -15,7 +15,7 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("tarefa")]
+        [Route("tarefa/{id}")]
         public async Task<ResultadoApi<Tarefa>> GetTarefa(long id)
         {
             var tarefa = await _tarefaService.GetTarefaAsync(id);
@@ -26,7 +26,6 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("tarefas")]
         public async Task<ResultadoApi<Tarefa[]>> GetTarefas()
         {
             var tarefas = await _tarefaService.GetTarefasAsync();
@@ -37,7 +36,7 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("tarefas/filter")]
+        [Route("/filter")]
         public async Task<ResultadoApi<Tarefa[]>> GetByFilter(long? userId, int? isCompleted,
                                                DateTimeOffset? dateCreatedAtStart, DateTimeOffset? dateCreatedAtEnd,
                                                DateTimeOffset? dateUpdatedAtStart, DateTimeOffset? dateUpdatedAtEnd)
@@ -52,7 +51,6 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpPost]
-        [Route("tarefa")]
         public async Task<ResultadoApi<Tarefa>> CreateTarefa(Dtos.TarefaDto tarefaDto)
         {
             var tarefaCriada = await _tarefaService.CreateTarefaAsync(tarefaDto);
@@ -63,7 +61,6 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpPatch]
-        [Route("tarefa")]
         public async Task<ResultadoApi<Tarefa>> UpdateTarefaAsync(Dtos.TarefaDto tarefaDto)
         {
             var tarefaAtualizada = await _tarefaService.UpdateTarefaAsync(tarefaDto);
@@ -74,7 +71,6 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpDelete]
-        [Route("tarefa")]
         public async Task<ResultadoApi<object>> DeleteTarefaAsync(long id)
         {
             await _tarefaService.DeleteTarefaAsync(id);
@@ -86,7 +82,7 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpPatch]
-        [Route("tarefa/category")]
+        [Route("/category")]
         public async Task<ResultadoApi<Tarefa>> UpdateTarefaCategory(long id, string category)
         {
             var tarefaAtualizada = await _tarefaService.UpdateTarefaCategoryAsync(id, category);

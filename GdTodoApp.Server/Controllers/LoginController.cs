@@ -16,7 +16,6 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
         [AllowAnonymous]
         public async Task<ResultadoApi<ResultadoLogin>> AuthenticateAsync([FromBody] Login model)
         {

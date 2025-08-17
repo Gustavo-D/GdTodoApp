@@ -17,7 +17,6 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("usuarios")]
         public async Task<ResultadoApi<Usuario[]>> GetUsuarios()
         {
             var usuarios = await _usuarioService.GetUsuariosAsync();
@@ -28,7 +27,6 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpPost]
-        [Route("usuario")]
         [AllowAnonymous]
         public async Task<ResultadoApi<object>> CreateUsuario(CreateUsuario usuario)
         {
