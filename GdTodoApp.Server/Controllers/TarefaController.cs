@@ -15,7 +15,7 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("tarefa/{id}")]
+        [Route("{id}")]
         public async Task<ResultadoApi<Tarefa>> GetTarefa(long id)
         {
             var tarefa = await _tarefaService.GetTarefaAsync(id);
@@ -36,7 +36,7 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpGet]
-        [Route("/filter")]
+        [Route("filter")]
         public async Task<ResultadoApi<Tarefa[]>> GetByFilter(long? userId, int? isCompleted,
                                                DateTimeOffset? dateCreatedAtStart, DateTimeOffset? dateCreatedAtEnd,
                                                DateTimeOffset? dateUpdatedAtStart, DateTimeOffset? dateUpdatedAtEnd)
@@ -82,7 +82,7 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpPatch]
-        [Route("/category")]
+        [Route("category")]
         public async Task<ResultadoApi<Tarefa>> UpdateTarefaCategory(long id, string category)
         {
             var tarefaAtualizada = await _tarefaService.UpdateTarefaCategoryAsync(id, category);
