@@ -37,11 +37,11 @@ namespace GdToDoApp.Server.Controllers
 
         [HttpGet]
         [Route("filter")]
-        public async Task<ResultadoApi<Tarefa[]>> GetByFilter(long? userId, int? isCompleted,
+        public async Task<ResultadoApi<Tarefa[]>> GetByFilter([FromQuery]long[] userId, int? isCompleted, [FromQuery]string[] category,
                                                DateTimeOffset? dateCreatedAtStart, DateTimeOffset? dateCreatedAtEnd,
                                                DateTimeOffset? dateUpdatedAtStart, DateTimeOffset? dateUpdatedAtEnd)
         {
-            var tarefas = await _tarefaService.GetTarefasByFilterAsync(userId, isCompleted,
+            var tarefas = await _tarefaService.GetTarefasByFilterAsync(userId, isCompleted, category,
                                                                 dateCreatedAtStart, dateCreatedAtEnd,
                                                                 dateUpdatedAtStart, dateUpdatedAtEnd);
             return new ResultadoApi<Tarefa[]>

@@ -16,6 +16,10 @@ namespace GdToDoApp.Server.Dtos.Mappers
             tarefa.CreatedAt = tarefaInstance?.CreatedAt ?? tarefaDto.CreatedAt;
             tarefa.UpdatedAt = tarefaDto.UpdatedAt;
             tarefa.UserId = tarefaDto.UserId;
+            if (tarefaInstance != null )
+            {
+                tarefa.User = tarefaInstance.User;
+            }
 
             return tarefa;
         }

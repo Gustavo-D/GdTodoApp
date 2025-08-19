@@ -21,6 +21,6 @@ public partial class Tarefa
     public DateTimeOffset UpdatedAt { get; set; }
 
     public long? UserId { get; set; }
-    [JsonIgnore]
+
     public virtual Usuario? User { get; set; }
 }

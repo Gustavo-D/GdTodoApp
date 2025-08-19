@@ -6,7 +6,7 @@ namespace GdToDoApp.Server.Services.Interfaces
     {
         public Task<Tarefa> GetTarefaAsync(long id);
         public Task<Tarefa[]> GetTarefasAsync();
-        public Task<Tarefa[]> GetTarefasByFilterAsync(long? userId, int? isCompleted,
+        public Task<Tarefa[]> GetTarefasByFilterAsync(long[]? userId, int? isCompleted, string[] category,
                                                DateTimeOffset? dateCreatedAtStart, DateTimeOffset? dateCreatedAtEnd,
                                                DateTimeOffset? dateUpdatedAtStart, DateTimeOffset? dateUpdatedAtEnd);
         public Task<Tarefa> CreateTarefaAsync(Dtos.TarefaDto tarefa);

@@ -13,18 +13,19 @@ namespace GdToDoApp.Server.Repositories
             _context = context;
         }
 
-        public async Task<Tarefa[]> GetAsync()
+        public async Task<Tarefa[]> GetAsync(long? id)
         {
-            var tarefas = await _context.Tarefas.ToArrayAsync();
+            var tarefas = await _context.Tarefas.Include(p => p.User).Where(p => id == null || p.Id == id).ToArrayAsync();
             return tarefas;
         }
 
-        public async Task<Tarefa[]> GetByFilterAsync(long? userId, int? isCompleted,
+        public async Task<Tarefa[]> GetByFilterAsync(long[] userId, int? isCompleted, string[] category,
                                                      DateTimeOffset? dateCreatedAtStart, DateTimeOffset? dateCreatedAtEnd,
                                                      DateTimeOffset? dateUpdatedAtStart, DateTimeOffset? dateUpdatedAtEnd)
         {
-            var tarefas = await _context.Tarefas.Where(p => (userId == null || p.UserId == userId)
+            var tarefas = await _context.Tarefas.Where(p => ((userId == null || userId.Length < 1) || userId.Contains((long)p.UserId) )
                                                          && (isCompleted == null || p.IsCompleted == isCompleted)
+                                                         && ((category == null || category.Length < 1) || category.Contains(p.Category))
                                                          && (dateCreatedAtStart == null || p.CreatedAt >= dateCreatedAtStart)
                                                          && (dateCreatedAtEnd == null || p.CreatedAt <= dateCreatedAtEnd)
 
