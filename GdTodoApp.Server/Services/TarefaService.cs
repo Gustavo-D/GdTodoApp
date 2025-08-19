@@ -23,7 +23,7 @@ namespace GdToDoApp.Server.Services
         public async Task<Tarefa[]> GetTarefasAsync()
         {
             var tarefas = await _repository.GetAsync(null);
-            return tarefas;
+            return [.. tarefas.OrderBy(p => p.Id)];
         }
 
         public async Task<Tarefa[]> GetTarefasByFilterAsync(long[] userId, int? isCompleted, string[] category,
@@ -32,7 +32,7 @@ namespace GdToDoApp.Server.Services
         {
             var tarefas = await _repository.GetByFilterAsync
                           (userId, isCompleted, category, dateCreatedAtStart, dateCreatedAtEnd, dateUpdatedAtStart, dateUpdatedAtEnd);
-            return tarefas;
+            return [.. tarefas.OrderBy(p => p.Id)];
         }
 
         public async Task<Tarefa> CreateTarefaAsync(Dtos.TarefaDto tarefaDto)
