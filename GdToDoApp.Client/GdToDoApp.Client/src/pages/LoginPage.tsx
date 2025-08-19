@@ -2,11 +2,16 @@
 import React, { useState } from 'react';
 import { Container, Box, Typography, TextField, Button, Tabs, Tab, Paper } from '@mui/material';
 import { httpPost } from '../services/apiService';
+import { useNavigate } from 'react-router';
+import type { User } from '../types/user';
+import { Toast } from '../components/Toast';
 
 const LoginPage: React.FC = () => {
+    const navigate = useNavigate();
     const [tab, setTab] = useState(0);
-    const [loginData, setLoginData] = useState({ email: '', password: '' });
-    const [registerData, setRegisterData] = useState({ name: '', email: '', password: '' });
+    const [loginData, setLoginData] = useState<User>({ username: '', password: '' });
+    const [registerData, setRegisterData] = useState<User>({ username: '', password: '' });
+    const [toast, setToast] = useState({ open: false, message: '', severity: 'error' });
 
     const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
         setTab(newValue);
@@ -20,14 +25,37 @@ const LoginPage: React.FC = () => {
         setRegisterData({ ...registerData, [e.target.name]: e.target.value });
     };
 
-    const handleLoginSubmit = (e: React.FormEvent) => {
+    const submitLogin = async (data: User) => {
+        const onSuccess = async (response: {data: {token: string}}) => {
+            localStorage.setItem('token', response.data.token);
+            navigate('/dashboard');
+        };
+        const onError = async (error: string) => {
+            setToast({ open: true, message: error, severity: 'error' });
+        };
+
+        await httpPost('login', data, onSuccess, onError);
+    }
+
+    const handleLoginSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        httpPost('login', loginData);
+        await submitLogin(loginData);
     };
 
-    const handleRegisterSubmit = (e: React.FormEvent) => {
+    const handleRegisterSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        httpPost('usuario', registerData);
+        
+        const onSuccess = async () => {
+            setToast({ open: true, message: 'Usuário registrado com sucesso!', severity: 'success' });
+            setTimeout(() => {
+                submitLogin(registerData);
+            }, 1500);
+        };
+        const onError = async (error: string) => {
+            setToast({ open: true, message: error, severity: 'error' });
+        };
+
+        await httpPost('usuario', registerData, onSuccess, onError);
     };
 
     return (
@@ -46,7 +74,7 @@ const LoginPage: React.FC = () => {
                             type="text"
                             fullWidth
                             margin="normal"
-                            value={loginData.email}
+                            value={loginData.username}
                             onChange={handleLoginChange}
                             required
                         />
@@ -73,7 +101,7 @@ const LoginPage: React.FC = () => {
                             type="text"
                             fullWidth
                             margin="normal"
-                            value={registerData.email}
+                            value={registerData.username}
                             onChange={handleRegisterChange}
                             required
                         />
@@ -93,6 +121,7 @@ const LoginPage: React.FC = () => {
                     </Box>
                 )}
             </Paper>
+            <Toast config={toast} onClose={() => setToast({ ...toast, open: false })} />
         </Container>
     );
 };

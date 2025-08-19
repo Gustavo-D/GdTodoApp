@@ -3,5 +3,7 @@ export type Task = {
     title: string;
     description: string;
     category: string;
-    completed?: boolean;
+    isCompleted?: 0 | 1;
+    userId?: number;
+    user?: { username: string }
 }
