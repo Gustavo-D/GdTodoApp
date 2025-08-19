@@ -31,7 +31,7 @@ namespace GdToDoApp.Server.Repositories
 
                                                          && (dateUpdatedAtStart == null || p.UpdatedAt >= dateUpdatedAtStart)
                                                          && (dateUpdatedAtEnd == null || p.UpdatedAt <= dateUpdatedAtEnd)
-                                                      ).ToArrayAsync();
+                                                      ).Include(p => p.User).ToArrayAsync();
             return tarefas;
         }
 
