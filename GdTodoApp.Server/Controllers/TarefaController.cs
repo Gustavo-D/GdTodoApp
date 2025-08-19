@@ -71,6 +71,7 @@ namespace GdToDoApp.Server.Controllers
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public async Task<ResultadoApi<object>> DeleteTarefaAsync(long id)
         {
             await _tarefaService.DeleteTarefaAsync(id);
